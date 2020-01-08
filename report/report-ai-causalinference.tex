@@ -217,13 +217,36 @@
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section{Structure of the Network}
-List at least 10 binary variables all measurable involved in the problem
 
-State which is the objective of the network: for instance, highlight a couple of situations in which decision making could be difficult and in which the graph could provide valuable indications.
+The problem modelled is a generic trip by car, influenced by factors such as the strike of public transport, road works or even the weather, and the delay that comes with it. 
+The causal diagram that model this problem includes the following variables:
+\begin{itemize}
+	\item \texttt{Weather}: weather during the journey that should be \textit{sunny} or \textit{rainy}.
+	\item \texttt{Strike}: \textit{true} if a strike of public transport takes place, \textit{false} otherwise.
+	\item \texttt{RushHour}: \textit{true} if the time it’s rush hour, \textit{false} otherwise.
+	\item \texttt{RoadConditions}: condition of the road floor, that depends on the weather, and should be \textit{dry} or \textit{wet}.
+	\item \texttt{Humor}: humor of the driver, dependent on the weather, that is \textit{good} or \textit{bad}.
+	\item \texttt{RoadWorks}: \textit{true} if there are road maintenance works in progress, \textit{false} otherwise. This variable depends on the conditions of the road.
+	\item \texttt{Speed}: driving velocity, that should be \textit{slow} or \textit{fast}, dependent on the road condition, if it’s rush hour and if there are road works.
+	\item \texttt{Danger}: danger incurred during the trip, that should be \textit{low} or \textit{high}, dependent on the driving velocity, the road conditions and if it’s rush hour.
+	\item \texttt{Accident}: accident risk, that could be \textit{low} or \textit{high}, influenced by the danger, the humour of the driver and if there is a strike of the public transport.
+	\item \texttt{Delay}: \textit{true} if the trip is delayed, \textit{false} otherwise.
+\end{itemize}
 
-Explaining how you decide the arcs orientation, in case they are not self- explaining.
+The objective of the network is highlight hoe weather and humour impacts on travel safety. 
+The graph could provide valuable indications about the correlation between the driver humour and a delayed trip, or for example between the weather and the risk of an accident and also on how the road conditions influences car crashes.
 
-Which arrows can be reversed without being detectable by a statistical test? Explain why.
+Each node is connected by an arrow to one or more other nodes upon which it has a causal influence. Most of the arcs orientation are self- explaining. An exception was made for the \texttt{Humor} variable, that influences the accident risk and is caused only by the weather and not for example by the delay. 
+
+%FIXME
+%Which arrows can be reversed without being detectable by a statistical test? Explain why.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\linewidth]{../code/network.pdf}	
+	\caption{Bayesian Network}
+	\label{fig:net}
+\end{figure}
 
 \subsection*{D-Separation}
 Identify at least 4 couple of nodes (the node of each couple should be not directly linked to each other) and analyse their d-separation properties possibly conditioning on others.
@@ -234,6 +257,14 @@ Discuss how d-connected variables are in fact dependent in the real problem, whi
 Explain how do you fill the probability tables for the nodes. For instance:
 a. you have retrieved information from the internet (or other sources); b. you have estimated the CPTs from a database;
 c. you have relied on your personal experience/common sense.
+
+
+
+
+
+Any causal model can be implemented as a Bayesian network. Bayesian networks can be used to provide the inverse probability of an event (given an outcome, what are the probabilities of a specific cause). This requires preparation of a conditional probability table, showing all possible inputs and outcomes with their associated probabilities.
+
+For example, given a two variable model of Disease and Test (for the disease) the conditional probability table takes the form:
 
 \section{Causal Inference}
 
