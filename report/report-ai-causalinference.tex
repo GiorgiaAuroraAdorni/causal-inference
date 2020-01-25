@@ -389,71 +389,182 @@ In case of the variable \texttt{Weather}, the prior probability is difficult to 
 \section{Causal Inference}
 
 \subsection*{Causal Effect}
-Given the graph, and a pair of variable \texttt{X}: \texttt{Speed} and \texttt{Y}: \texttt{Accident}. In this case, \texttt{A}: \texttt{RoadConditions} and \texttt{B}: \texttt{RushHour} are the backdoor variables. Then the causal effect of \texttt{X} on \texttt{Y} is given by the following formula:
+Given the graph, and a pair of variables \texttt{X}: \texttt{Speed} and \texttt{Y}: \texttt{Accident}. In this case, \texttt{A}: \texttt{RoadConditions} and \texttt{B}: \texttt{RushHour} are the backdoor variables. Then the causal effect of \texttt{X} on \texttt{Y} is given by the following formula:
 \begin{equation}
 	\text{P}(Y = y \mid {do}(X = x)) = \sum_{A}^{}\sum_{B}^{}	\text{P}(Y = y \mid X = x, A = a, B = b)\text{P}(A = a, B = b)
 \end{equation}
 where $a$, $b$, $y$ and $x$ range over all the combinations of values that the associated variable can take.\\
 
 \noindent Calculating the cases in which $\mathtt{Y}: \{ y_0=\mathtt{false}, y_1=\mathtt{true}\}$ given $\mathtt{X}: \{ x_0=\mathtt{slow}, x_1=\mathtt{fast}\}$ :
-
-\begin{equation*}\begin{aligned}
-\text{P}(Y = y_0 \mid {do}(X = x_0)) & = \sum_{A}^{}\sum_{B}^{}	\text{P}(Y = y_0 \mid X = x_0, A = a, B = b)\text{P}(A = a, B = b) = \\
-& = 0.6062	
-\end{aligned}\end{equation*}
-
-\begin{equation*}\begin{aligned}
-\text{P}(Y = y_1 \mid {do}(X = x_0)) & = \sum_{A}^{}\sum_{B}^{}	\text{P}(Y = y_1 \mid X = x_0, A = a, B = b)\text{P}(A = a, B = b) = \\
-& = 0.3938
-\end{aligned}\end{equation*}
-
-\begin{equation*}\begin{aligned}
-\text{P}(Y = y_0 \mid {do}(X = x_1)) & = \sum_{A}^{}\sum_{B}^{}	\text{P}(Y = y_0 \mid X = x_1, A = a, B = b)\text{P}(A = a, B = b) = \\
-& = 0.4053	
-\end{aligned}\end{equation*}
-
-\begin{equation*}\begin{aligned}
-\text{P}(Y = y_1 \mid {do}(X = x_1)) & = \sum_{A}^{}\sum_{B}^{}	\text{P}(Y = y_1 \mid X = x_1, A = a, B = b)\text{P}(A = a, B = b) = \\
-& = 0.5947
-\end{aligned}\end{equation*}
-
+\begin{equation*}
+\begin{aligned}
+\text{P}(y_0 \mid {do}(x_0)) = \sum_{A}^{}\sum_{B}^{}	\text{P}(y_0 \mid x_0, A = a, B = b)\text{P}(A = a, B = b)  = 0.6062	
+\\
+\text{P}(y_1 \mid {do}(x_0)) = \sum_{A}^{}\sum_{B}^{}	\text{P}(y_1 \mid x_0, A = a, B = b)\text{P}(A = a, B = b) = 0.3938
+\\
+\text{P}(y_0 \mid {do}(x_1)) = \sum_{A}^{}\sum_{B}^{}	\text{P}(y_0 \mid x_1, A = a, B = b)\text{P}(A = a, B = b) =  0.4053	
+\\
+\text{P}(y_1 \mid {do}(x_1)) = \sum_{A}^{}\sum_{B}^{}	\text{P}(y_1 \mid x_1, A = a, B = b)\text{P}(A = a, B = b) =  0.5947
+\end{aligned}
+\end{equation*}
 
 \subsection*{Confounders}
+Given the variables \texttt{X}: \texttt{Speed} and \texttt{Y}: \texttt{Accident}, they do not have any confounder. In fact, the possible confounders can be identified searching for the parents of \texttt{X}, that are \texttt{RoadWorks}, \texttt{RoadConditions} and \texttt{RushHour}, but none of this variables is a parent of \texttt{Y}, so they do not have any confounder.
 
-Identify possible confounders between X and Y.
+\subsection*{Randomised Controlled Study}
+%FIXME
+With this specific problem is not possible to perform randomised controlled study on every variable. For example, we cannot influence the weather, so randomise variables affecting \texttt{RoadConditions} or \texttt{Mood} is impossible.
 
-
-
-• Would it be practically possible in your specific problem to perform also a randomized controlled study to disentangle the causal effect between the variables from their correlation?
+By the way, if we are interested in performing a randomised controlled study to disentangle the causal effect between \texttt{X}: \texttt{Speed} and \texttt{Y}: \texttt{Accident} from their correlation it is necessary to fix or vary randomly the variable \texttt{X}. In this case is possible to fix the driving velocity by introducing for example a speed limit.
+%then what happen?
 
 \subsection*{Average Causal Effect}
-
-Compute the ACE of X on Y.
-
-\subsection*{Z-Specific Effect}
-
-Choose another pair of variable (X,Y) (it can be also the previous one) and:
-Choose another variable C such that it is possible to calculate the c-specific effect of X on Y and calculate it.
-
-
-• Identify a minimal set of variables that must be measured in order to estimate the c-specific effect of X on Y.
+The Average Causal Effect (ACE) of X on Y is computed for both the possible values of the variable \texttt{Accident}, that are $\mathtt{Y}: \{ y_0=\mathtt{false}, y_1=\mathtt{true}\}$ 
+\begin{equation}
+\begin{aligned}
+\text{ACE}&=\text{P}(y_0 \mid {do}(x_0)) -\text{P}(y_0 \mid {do}(x_1)) \approx -0.189
+\\
+\text{ACE}&=\text{P}(y_1 \mid {do}(x_0)) -\text{P}(y_1 \mid {do}(x_1)) \approx 0.189
+\end{aligned}
+\end{equation}
 
 
+\subsection*{C-Specific Effect}
+%Using the same \texttt{X} and \texttt{Y} as before, and chosen \texttt{C}: \texttt{RushHour}.
+%The C-Specific Effect if given by:
+%\begin{equation}
+%	P(Y=y|do(X=x), C=c)= \sum_{z} P(Y=y|X=x, C=c, Z=z) P(Z=z|C=c)
+%\end{equation}
+%The set Z identified such that $C \cup Z$ satisfy the backdoor criterion is composed by the variables \texttt{Danger}, \texttt{Mood}, \texttt{RoadConditions}, \texttt{Strike}, \texttt{Weather}.\newline
+%Defined $\mathtt{X}: \{ x_0=\mathtt{slow}, x_1=\mathtt{fast}\}$, $\mathtt{Y}: \{ y_0=\mathtt{false}, y_1=\mathtt{true}\}$ and $\mathtt{C}: \{ c_0=\mathtt{false}, c_1=\mathtt{true}\}$ it is possible to compute the C-Specific Effect for all the possible realisation of the variables as follows: 
+%
+%\begin{equation*}
+%P(y_0|do(x_0), c_0)= \sum_{z} P(y_0|x_0, c_0, z) P(z|c_0)=0.4914
+%\end{equation*}
+%
+%\begin{equation*}
+%P(y_1|do(x_0), c_0)= \sum_{z} P(y_1|x_0, c_0, z) P(z|c_0)=0.5086
+%\end{equation*}
+%
+%\begin{equation*}
+%P(y_0|do(x_1), c_0)= \sum_{z} P(y_0|x_1, c_0, z) P(z|c_0)=0.3604
+%\end{equation*}
+%
+%\begin{equation*}
+%P(y_1|do(x_1), c_0)= \sum_{z} P(y_1|x_1, c_0, z) P(z|c_0)=0.6396
+%\end{equation*}
+%
+%\begin{equation*}
+%P(y_0|do(x_0), c_1)= \sum_{z} P(y_0|x_0, c_1, z) P(z|c_1)=0.6350
+%\end{equation*}
+%
+%\begin{equation*}
+%P(y_1|do(x_0), c_1)= \sum_{z} P(y_1|x_0, c_1, z) P(z|c_1)=0.3650
+%\end{equation*}
+%
+%\begin{equation*}
+%P(y_0|do(x_1), c_1)= \sum_{z} P(y_0|x_1, c_1, z) P(z|c_1)=0.4165
+%\end{equation*}
+%
+%\begin{equation*}
+%P(y_1|do(x_1), c_1)= \sum_{z} P(y_1|x_1, c_1, z) P(z|c_1)=0.5835
+%\end{equation*}
+%
+%The minimal set of variables that must be measured in order to estimate the c-specific effect of X on Y includes \texttt{Speed}, \texttt{Accident}, \texttt{RushHour} and \texttt{RoadConditions}.
+Given a new pair of variable such that \texttt{X}: \texttt{Danger} and \texttt{Y}: \texttt{Delay}, and chosen \texttt{C}: \texttt{RoadConditions}, the C-Specific Effect is given by:
+\begin{equation}
+P(Y=y|do(X=x), C=c)= \sum_{z} P(Y=y|X=x, C=c, Z=z) P(Z=z|C=c)
+\end{equation}
+The set Z identified, such that $C \cup Z$ satisfy the backdoor criterion, includes the variable \texttt{Speed}.
+Defined $\mathtt{X}: \{ x_0=\mathtt{low}, x_1=\mathtt{high}\}$, $\mathtt{Y}: \{ y_0=\mathtt{false}, y_1=\mathtt{true}\}$ and $\mathtt{C}: \{ c_0=\mathtt{dry}, c_1=\mathtt{wet}\}$ it is possible to compute the C-Specific Effect for all the possible realisation of the variables as follows: 
 
-We calculate the C-specific effect of X on Y that in this case can be calculated:
+\begin{equation*}
+P(y_0|do(x_0), c_0)= \sum_{z} P(y_0|x_0, c_0, z) P(z|c_0)=0.6150
+\end{equation*}
 
-$$P(Y=y|do(X=x), C=c)= \sum_{z} P(Y=y|X=x, C=c, Z=z) P(Z=z|C=c)$$
+\begin{equation*}
+P(y_1|do(x_0), c_0)= \sum_{z} P(y_1|x_0, c_0, z) P(z|c_0)=0.3850
+\end{equation*}
 
-because $\{Z,C\}$ satisfies Rule 2.
+\begin{equation*}
+P(y_0|do(x_1), c_0)= \sum_{z} P(y_0|x_1, c_0, z) P(z|c_0)=0.2866
+\end{equation*}
 
+\begin{equation*}
+P(y_1|do(x_1), c_0)= \sum_{z} P(y_1|x_1, c_0, z) P(z|c_0)=0.7134
+\end{equation*}
 
+\begin{equation*}
+P(y_0|do(x_0), c_1)= \sum_{z} P(y_0|x_0, c_1, z) P(z|c_1)=0.5633
+\end{equation*}
 
+\begin{equation*}
+P(y_1|do(x_0), c_1)= \sum_{z} P(y_1|x_0, c_1, z) P(z|c_1)=0.4367
+\end{equation*}
+
+\begin{equation*}
+P(y_0|do(x_1), c_1)= \sum_{z} P(y_0|x_1, c_1, z) P(z|c_1)=0.2662
+\end{equation*}
+
+\begin{equation*}
+P(y_1|do(x_1), c_1)= \sum_{z} P(y_1|x_1, c_1, z) P(z|c_1)=0.7338
+\end{equation*}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=.5\linewidth]{../code/c-specific-effect.png}	
+	\caption*{CPT C-Specific Effect}
+	\label{fig:c-specific-effect}
+\end{figure}
+	%FIXME
+The minimal set of variables that must be measured in order to estimate the c-specific effect of X on Y includes \texttt{Danger}, \texttt{Delay}, \texttt{Speed} and \texttt{RoadConditions}.
 \subsection*{Conditional Intervention}
-• Choose a function g and compute the effect of the conditional intervention of X=g(C) on Y.
+Given \texttt{X}: \texttt{Danger} and \texttt{Y}: \texttt{Delay}, and chosen \texttt{C}: \texttt{RoadConditions}, the Conditional Intervention in which we are interested is:
+
+$$P(Y=y|do(X=g(C)))$$
+
+where $$ g(C) := \left\{\begin{array}{lr}
+low, & \text{if } C=dry\\
+high, & \text{if } C=wet
+\end{array}\right\}$$
+Then the conditional intervention is computed using 
+\begin{equation}
+	P(Y=y|do(X=g(C))) = \sum_c P(Y=y|do(X=g(C)), C=c)P(C=c)
+\end{equation}
+$$$$
 
 \subsection*{Mediation and Controlled Direct Effect}
-Choose another pair of variable (X,Y) (it can be also the previous one) and:
-• Identify possible mediating variables between X and Y and calculate the CDE of Y changing the value of X.
+Given a new pair of variable such that \texttt{X}: \texttt{RushHour} and \texttt{Y}: \texttt{Danger}, the variable \texttt{M}: \texttt{Speed} is a mediation variable between \texttt{X} and \texttt{Y}.
+The Controlled Direct Effect is computed with the following formula:
+\begin{equation}
+	\text{CDE} = P(Y = y|\mathrm{do}(X = x),\mathrm{do}(M = m)) - P(Y = y|\mathrm{do}(X = x'),\mathrm{do}(M = m))
+\end{equation}
+Since there are not any spurious path between X and Y, the formula can be rewritten as follows:
+\begin{equation*}
+\text{CDE} = P(y| x,\mathrm{do}( m)) - P(y|x',\mathrm{do}(m))
+\end{equation*}
+Then, applying the backdoor criterion it is possible to bock the spurious path between M and Y, in particular using \texttt{Z}: \texttt{RoadConditions} as backdoor variable. We should consider the variable \texttt{W}: \texttt{Weather} since is parent of Z.
+Finally we obtain
+\begin{equation*}
+\text{CDE} = \bigg[\sum_{z,w}P(y| x,m, z)P(z|w)P(w)\bigg] - \bigg[\sum_{z,w}P(y| x',m, z)P(z|w)P(w)\bigg]
+\end{equation*}
+
+Defined $\mathtt{X}: \{ x_0=\mathtt{true}, x_1=\mathtt{false}\}$, $\mathtt{Y}: \{ y_0=\mathtt{low}, y_1=\mathtt{high}\}$, $\mathtt{M}: \{ m_0=\mathtt{slow}, m_1=\mathtt{fast}\}$ the CME are: 
+
+\begin{equation*}
+\text{CDE} = P(y_0|\mathrm{do}(x_0),\mathrm{do}(m_0)) - P(y_0|\mathrm{do}(x_1),\mathrm{do}(m_0)) = 0.1050 - 0.2330 = -0.128
+\end{equation*}
+\begin{equation*}
+\text{CDE} = P(y_1|\mathrm{do}(x_0),\mathrm{do}(m_0)) - P(y_1|\mathrm{do}(x_1),\mathrm{do}(m_0))=0.8950 - 0.7675 = 0.128
+\end{equation*}
+\begin{equation*}
+\text{CDE} = P(y_0|\mathrm{do}(x_0),\mathrm{do}(m_1)) - P(y_0|\mathrm{do}(x_1),\mathrm{do}(m_1))=0.405 - 0.725 = -0.31999999999999995
+\end{equation*}
+\begin{equation*}
+\text{CDE} = P(y_1|\mathrm{do}(x_0),\mathrm{do}(m_1)) - P(y_1|\mathrm{do}(x_1),\mathrm{do}(m_1))=0.595 - 0.275 = 0.31999999999999995
+\end{equation*}
+
+ CDE of Y changing the value of X.
 
 \section{Simulation}
 Suppose that you can’t measure some parents of variable X chosen in every point of “Causal Inference”.
