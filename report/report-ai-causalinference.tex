@@ -250,7 +250,7 @@ Each node is connected by an arrow to one or more other nodes upon which it has 
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=\linewidth]{../code/network.pdf}	
+	\includegraphics[width=.9\linewidth]{../code/network.pdf}	
 	\caption{Bayesian Network}
 	\label{fig:net}
 \end{figure}
@@ -263,6 +263,13 @@ In fact, even inverting the two arrows no v-structured are created, therefore th
 Instead, the arc from \texttt{RoadWorks} to \texttt{RoadConditions} cannot be reverted since doing this a v-structure is created. Hence, the arc could only be turned on condition of turn also the one between 
 \texttt{Weather} and \texttt{RoadConditions}.
 
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\linewidth]{../code/network-vstructures.pdf}	
+	\caption{V-Structures}
+	\label{fig:vstructure}
+\end{figure}
+
 \subsection*{D-Separation}
 D-Separation tells when two variables are d-separated along a path (blocked), that means independent and when they are d-connected along a path (unblocked) or likely dependent.
 They are actually independent if they are d-separated along all possible paths.
@@ -271,31 +278,26 @@ They are likely dependent if there is at least one unblocked path connecting the
 A path is blocked by a set of nodes if and only if the path contains a chain of nodes or a fork such that the middle node is in the set of nodes or if the path contains a collider such that the collision node and every descendant are not in the given set of nodes. 
 
 \begin{itemize}
-	\item X: \texttt{RushHour}, Y: \texttt{RoadConditions}:\\	
-	Conditioning on one of the variables \texttt{Strike}, \texttt{RoadWorks} \texttt{Weather} or \texttt{Mood}, \texttt{RushHour} and \texttt{RoadConditions} are d-separated since the path from these two variables are all blocked.
-	It is possible to write 
-	\[ Y = \alpha + r_x X + r_a A + \epsilon \quad \text{with } r_a=0\]
-	where A for example is \texttt{Strike}. 
-	They are not actually independent since they are not d-separated along all the paths. For example, conditioning on one of the variables \texttt{Danger},\texttt{Speed}, \texttt{Accident} and \texttt{Delay}, the path from X to Y contains a collider in which the evidence is a collision node.
-	In fact, all the variables d-connected are dependent in the real problem, for example \texttt{RushHour}, \texttt{RoadConditions} and \texttt{Danger}, while \texttt{RushHour}, \texttt{RoadConditions} and \texttt{Mood} are independent.
+	\item X: \texttt{RushHour}, Y: \texttt{RoadConditions}:\\
+	X and Y are d-separated without conditioning on any variable since there are only blocked colliders. Even conditioning on one of the variables \texttt{Strike}, \texttt{RoadWorks} \texttt{Weather} or \texttt{Mood}, \texttt{RushHour} and \texttt{RoadConditions} are d-separated since the path from these two variables are all blocked.
 	
-	\item X: \texttt{RushHour}, Y: \texttt{Strike}:\\
-	Conditioning on one of the variables \texttt{Danger}, \texttt{RoadWorks}, \texttt{Weather}, \texttt{Speed} or \texttt{Mood}, \texttt{RushHour} and \texttt{Strike} are d-separated since the path from these two variables are all blocked.
-	Instead, they are not d-separated along the paths that condition on variables \texttt{Accident} and \texttt{Delay} since in both the cases the paths contain a collider in which the given is the collision node. Hence, they are not independent.
-	In the real problem, in fact, the d-connected variables are dependent, for example \texttt{RushHour}, \texttt{Strike} and \texttt{Danger}, while \texttt{RushHour}, \texttt{Strike} and \texttt{RoadWorks} are independent.
+	They are independent since they are d-separated along all the paths, in fact, in a real problem the rush hour does not depend on the road conditions and nor the vice-versa. 
 	
 	\item X: \texttt{Speed}, Y: \texttt{Accident}:\\
-	Are not d-separated given any of the variables of the domain.
-	%FIXME
-	"Danger", "Mood", "RoadConditions"
+	In this case, without conditioning on some variables, X and Y are not d-separated. Instead, conditioning on \texttt{Danger}, \texttt{RoadConditions} they are d-separated. 
+	
+	It is clear how in the real word, an accident depend on the driving velocity.  
 	
 	\item X: \texttt{RoadConditions}, Y: \texttt{Strike}:\\
-	In this case the same considerations made for the variables \texttt{RushHour} and \texttt{Strike} in example 2 apply.
+	In this case the same considerations made for the first example. 
+	
+	Clearly, the possibility of a strike is not dependent on the road conditions and nor the vice-versa. 
 	
 	\item X: \texttt{Speed}, Y: \texttt{Mood}:\\
-	Conditioning on one of the variables \texttt{RoadConditions} or \texttt{Weather}, \texttt{Speed} and \texttt{Mood} are d-separated since the path from these two variables are all blocked.
-	Instead, they are not d-separated along the paths that condition on all the other variables, so they are not independent.
-	The d-connected variables, for example \texttt{Speed}, \texttt{Mood} and \texttt{Danger}, are dependent in the real problem, while \texttt{Speed}, \texttt{Mood} and \texttt{RoadConditions} are not dependent.
+	In this case, without conditioning on some variables, X and Y are not d-separated. Instead, conditioning on \texttt{RoadConditions} or \texttt{Weather}, the two variable becomes d-separated.
+	So, we cannot say that X and Y are independent, since they are not d-separated along all the paths.
+	
+	Knowing that \texttt{Weather} is a confounder for X and Y, in the real world, it influences both the driving velocity and the mood of a driver.
 
 \end{itemize}
 
@@ -349,7 +351,11 @@ In case of the variable \texttt{Weather}, the prior probability is difficult to 
 		\caption*{RoadWorks CPT}
 		\label{fig:roadworks}
 	\end{minipage}
+	\end{center}
+\end{figure}
 
+\begin{figure}[H]
+	\begin{center}	
 	\begin{minipage}[c]{.5\textwidth}
 		\centering
 		\includegraphics[width=\linewidth]{../code/speed.pdf}	
@@ -363,11 +369,7 @@ In case of the variable \texttt{Weather}, the prior probability is difficult to 
 		\caption*{Danger CPT}
 		\label{fig:danger}
 	\end{minipage}
-	\end{center}
-	\end{figure}
-	
-	\begin{figure}[H]
-	\begin{center}
+
 	\centering
 	\begin{minipage}[c]{.45\textwidth}
 		\centering
@@ -393,9 +395,9 @@ Given the graph, and a pair of variables \texttt{X}: \texttt{Speed} and \texttt{
 \begin{equation}
 	\text{P}(Y = y \mid {do}(X = x)) = \sum_{A}^{}\sum_{B}^{}	\text{P}(Y = y \mid X = x, A = a, B = b)\text{P}(A = a, B = b)
 \end{equation}
-where $a$, $b$, $y$ and $x$ range over all the combinations of values that the associated variable can take.\\
+where $a$, $b$, $y$ and $x$ range over all the combinations of values that the associated variable can take.
+Calculating the cases in which $\mathtt{Y}: \{ y_0=\mathtt{false}, y_1=\mathtt{true}\}$ given $\mathtt{X}: \{ x_0=\mathtt{slow}, x_1=\mathtt{fast}\}$ :
 
-\noindent Calculating the cases in which $\mathtt{Y}: \{ y_0=\mathtt{false}, y_1=\mathtt{true}\}$ given $\mathtt{X}: \{ x_0=\mathtt{slow}, x_1=\mathtt{fast}\}$ :
 \begin{equation*}
 \begin{aligned}
 \text{P}(y_0 \mid {do}(x_0)) = \sum_{A}^{}\sum_{B}^{}	\text{P}(y_0 \mid x_0, A = a, B = b)\text{P}(A = a, B = b)  = 0.6062	
@@ -409,105 +411,62 @@ where $a$, $b$, $y$ and $x$ range over all the combinations of values that the a
 \end{equation*}
 
 \subsection*{Confounders}
-Given the variables \texttt{X}: \texttt{Speed} and \texttt{Y}: \texttt{Accident}, they do not have any confounder. In fact, the possible confounders can be identified searching for the parents of \texttt{X}, that are \texttt{RoadWorks}, \texttt{RoadConditions} and \texttt{RushHour}, but none of this variables is a parent of \texttt{Y}, so they do not have any confounder.
+Given the variables \texttt{X}: \texttt{Speed} and \texttt{Y}: \texttt{Accident}, to identify possible confounders it is necessary to recognise ancestors of X such that they causes a spurious association with Y. In this case, the possible confounder are \texttt{RoadWorks}, \texttt{RoadConditions}, \texttt{RushHour} and \texttt{Weather}.
 
 \subsection*{Randomised Controlled Study}
-%FIXME
-With this specific problem is not possible to perform randomised controlled study on every variable. For example, we cannot influence the weather, so randomise variables affecting \texttt{RoadConditions} or \texttt{Mood} is impossible.
+With this specific problem is not possible to perform randomised controlled study on every variable, for example we cannot influence the weather.
 
-By the way, if we are interested in performing a randomised controlled study to disentangle the causal effect between \texttt{X}: \texttt{Speed} and \texttt{Y}: \texttt{Accident} from their correlation it is necessary to fix or vary randomly the variable \texttt{X}. In this case is possible to fix the driving velocity by introducing for example a speed limit.
-%then what happen?
+If we are interested in performing a randomised controlled study to disentangle the causal effect of \texttt{X}: \texttt{Speed} on \texttt{Y}: \texttt{Accident} from their correlation it is necessary to fix or vary randomly the variable \texttt{X}. In this case it is possible, for example introducing a speed limit to control the driving velocity and reduce the number of accidents. Although this is not a perfect example, because introducing a speed limit does not guarantee that people will comply with it.
 
 \subsection*{Average Causal Effect}
 The Average Causal Effect (ACE) of X on Y is computed for both the possible values of the variable \texttt{Accident}, that are $\mathtt{Y}: \{ y_0=\mathtt{false}, y_1=\mathtt{true}\}$ 
 \begin{equation}
 \begin{aligned}
-\text{ACE}&=\text{P}(y_0 \mid {do}(x_0)) -\text{P}(y_0 \mid {do}(x_1)) \approx -0.189
+\text{ACE}&=\text{P}(y_0 \mid {do}(x_0)) -\text{P}(y_0 \mid {do}(x_1)) \approx 0.2009
 \\
-\text{ACE}&=\text{P}(y_1 \mid {do}(x_0)) -\text{P}(y_1 \mid {do}(x_1)) \approx 0.189
+\text{ACE}&=\text{P}(y_1 \mid {do}(x_0)) -\text{P}(y_1 \mid {do}(x_1)) \approx -0.2009
 \end{aligned}
 \end{equation}
 
-
 \subsection*{C-Specific Effect}
-%Using the same \texttt{X} and \texttt{Y} as before, and chosen \texttt{C}: \texttt{RushHour}.
-%The C-Specific Effect if given by:
-%\begin{equation}
-%	P(Y=y|do(X=x), C=c)= \sum_{z} P(Y=y|X=x, C=c, Z=z) P(Z=z|C=c)
-%\end{equation}
-%The set Z identified such that $C \cup Z$ satisfy the backdoor criterion is composed by the variables \texttt{Danger}, \texttt{Mood}, \texttt{RoadConditions}, \texttt{Strike}, \texttt{Weather}.\newline
-%Defined $\mathtt{X}: \{ x_0=\mathtt{slow}, x_1=\mathtt{fast}\}$, $\mathtt{Y}: \{ y_0=\mathtt{false}, y_1=\mathtt{true}\}$ and $\mathtt{C}: \{ c_0=\mathtt{false}, c_1=\mathtt{true}\}$ it is possible to compute the C-Specific Effect for all the possible realisation of the variables as follows: 
-%
-%\begin{equation*}
-%P(y_0|do(x_0), c_0)= \sum_{z} P(y_0|x_0, c_0, z) P(z|c_0)=0.4914
-%\end{equation*}
-%
-%\begin{equation*}
-%P(y_1|do(x_0), c_0)= \sum_{z} P(y_1|x_0, c_0, z) P(z|c_0)=0.5086
-%\end{equation*}
-%
-%\begin{equation*}
-%P(y_0|do(x_1), c_0)= \sum_{z} P(y_0|x_1, c_0, z) P(z|c_0)=0.3604
-%\end{equation*}
-%
-%\begin{equation*}
-%P(y_1|do(x_1), c_0)= \sum_{z} P(y_1|x_1, c_0, z) P(z|c_0)=0.6396
-%\end{equation*}
-%
-%\begin{equation*}
-%P(y_0|do(x_0), c_1)= \sum_{z} P(y_0|x_0, c_1, z) P(z|c_1)=0.6350
-%\end{equation*}
-%
-%\begin{equation*}
-%P(y_1|do(x_0), c_1)= \sum_{z} P(y_1|x_0, c_1, z) P(z|c_1)=0.3650
-%\end{equation*}
-%
-%\begin{equation*}
-%P(y_0|do(x_1), c_1)= \sum_{z} P(y_0|x_1, c_1, z) P(z|c_1)=0.4165
-%\end{equation*}
-%
-%\begin{equation*}
-%P(y_1|do(x_1), c_1)= \sum_{z} P(y_1|x_1, c_1, z) P(z|c_1)=0.5835
-%\end{equation*}
-%
-%The minimal set of variables that must be measured in order to estimate the c-specific effect of X on Y includes \texttt{Speed}, \texttt{Accident}, \texttt{RushHour} and \texttt{RoadConditions}.
-Given a new pair of variable such that \texttt{X}: \texttt{Danger} and \texttt{Y}: \texttt{Delay}, and chosen \texttt{C}: \texttt{RoadConditions}, the C-Specific Effect is given by:
+Given a new pair of variable such that \texttt{X}: \texttt{RoadWorks} and \texttt{Y}: \texttt{Speed}, and chosen \texttt{C}: \texttt{Weather}, the C-Specific Effect is given by:
+
 \begin{equation}
 P(Y=y|do(X=x), C=c)= \sum_{z} P(Y=y|X=x, C=c, Z=z) P(Z=z|C=c)
 \end{equation}
-The set Z identified, such that $C \cup Z$ satisfy the backdoor criterion, includes the variable \texttt{Speed}.
-Defined $\mathtt{X}: \{ x_0=\mathtt{low}, x_1=\mathtt{high}\}$, $\mathtt{Y}: \{ y_0=\mathtt{false}, y_1=\mathtt{true}\}$ and $\mathtt{C}: \{ c_0=\mathtt{dry}, c_1=\mathtt{wet}\}$ it is possible to compute the C-Specific Effect for all the possible realisation of the variables as follows: 
+The set Z identified, such that $C \cup Z$ satisfy the backdoor criterion, includes the variable \texttt{RoadConditions}.
+Defined $\mathtt{X}: \{ x_0=\mathtt{false}, x_1=\mathtt{true}\}$, $\mathtt{Y}: \{ y_0=\mathtt{slow}, y_1=\mathtt{fast}\}$ and $\mathtt{C}: \{ c_0=\mathtt{sun}, c_1=\mathtt{rain}\}$ it is possible to compute the C-Specific Effect for all the possible realisation of the variables as follows: 
 
 \begin{equation*}
-P(y_0|do(x_0), c_0)= \sum_{z} P(y_0|x_0, c_0, z) P(z|c_0)=0.6150
+P(y_0|do(x_0), c_0)= \sum_{z} P(y_0|x_0, c_0, z) P(z|c_0)=0.3880
 \end{equation*}
 
 \begin{equation*}
-P(y_1|do(x_0), c_0)= \sum_{z} P(y_1|x_0, c_0, z) P(z|c_0)=0.3850
+P(y_1|do(x_0), c_0)= \sum_{z} P(y_1|x_0, c_0, z) P(z|c_0)=0.6129
 \end{equation*}
 
 \begin{equation*}
-P(y_0|do(x_1), c_0)= \sum_{z} P(y_0|x_1, c_0, z) P(z|c_0)=0.2866
+P(y_0|do(x_1), c_0)= \sum_{z} P(y_0|x_1, c_0, z) P(z|c_0)=0.8120
 \end{equation*}
 
 \begin{equation*}
-P(y_1|do(x_1), c_0)= \sum_{z} P(y_1|x_1, c_0, z) P(z|c_0)=0.7134
+P(y_1|do(x_1), c_0)= \sum_{z} P(y_1|x_1, c_0, z) P(z|c_0)=0.1880
 \end{equation*}
 
 \begin{equation*}
-P(y_0|do(x_0), c_1)= \sum_{z} P(y_0|x_0, c_1, z) P(z|c_1)=0.5633
+P(y_0|do(x_0), c_1)= \sum_{z} P(y_0|x_0, c_1, z) P(z|c_1)=0.5680
 \end{equation*}
 
 \begin{equation*}
-P(y_1|do(x_0), c_1)= \sum_{z} P(y_1|x_0, c_1, z) P(z|c_1)=0.4367
+P(y_1|do(x_0), c_1)= \sum_{z} P(y_1|x_0, c_1, z) P(z|c_1)=0.4320
 \end{equation*}
 
 \begin{equation*}
-P(y_0|do(x_1), c_1)= \sum_{z} P(y_0|x_1, c_1, z) P(z|c_1)=0.2662
+P(y_0|do(x_1), c_1)= \sum_{z} P(y_0|x_1, c_1, z) P(z|c_1)=0.8820
 \end{equation*}
 
 \begin{equation*}
-P(y_1|do(x_1), c_1)= \sum_{z} P(y_1|x_1, c_1, z) P(z|c_1)=0.7338
+P(y_1|do(x_1), c_1)= \sum_{z} P(y_1|x_1, c_1, z) P(z|c_1)=0.1180
 \end{equation*}
 
 \begin{figure}[H]
@@ -517,61 +476,75 @@ P(y_1|do(x_1), c_1)= \sum_{z} P(y_1|x_1, c_1, z) P(z|c_1)=0.7338
 	\label{fig:c-specific-effect}
 \end{figure}
 	%FIXME
-The minimal set of variables that must be measured in order to estimate the c-specific effect of X on Y includes \texttt{Danger}, \texttt{Delay}, \texttt{Speed} and \texttt{RoadConditions}.
+The minimal set of variables that must be measured in order to estimate the c-specific effect of X on Y includes \texttt{RoadWorks}, \texttt{Speed}, \texttt{Weather} and \texttt{RoadConditions}.
+
 \subsection*{Conditional Intervention}
-Given \texttt{X}: \texttt{Danger} and \texttt{Y}: \texttt{Delay}, and chosen \texttt{C}: \texttt{RoadConditions}, the Conditional Intervention in which we are interested is:
+Given the variables \texttt{X}: \texttt{RoadWorks} and \texttt{Y}: \texttt{Speed}, and chosen \texttt{C}: \texttt{Weather}, the Conditional Interventions in which we are interested is: 
 
 $$P(Y=y|do(X=g(C)))$$
 
 where $$ g(C) := \left\{\begin{array}{lr}
-low, & \text{if } C=dry\\
-high, & \text{if } C=wet
+false, & \text{if } C=rain\\
+true, & \text{if } C=sun
 \end{array}\right\}$$
 Then the conditional intervention is computed using 
 \begin{equation}
 	P(Y=y|do(X=g(C))) = \sum_c P(Y=y|do(X=g(C)), C=c)P(C=c)
 \end{equation}
-$$$$
+Then, 
+\begin{equation*}
+\begin{aligned}
+P(Y=y_0|do(X=g(C))) = \sum_c P(Y=y_0|do(X=g(C)), C=c)P(C=c) = 0.7388\\
+P(Y=y_1|do(X=g(C))) = \sum_c P(Y=y_1|do(X=g(C)), C=c)P(C=c) = 0.2612
+\end{aligned}
+\end{equation*}
 
 \subsection*{Mediation and Controlled Direct Effect}
-Given a new pair of variable such that \texttt{X}: \texttt{RushHour} and \texttt{Y}: \texttt{Danger}, the variable \texttt{M}: \texttt{Speed} is a mediation variable between \texttt{X} and \texttt{Y}.
+Given a new pair of variable such that \texttt{X}: \texttt{RoadConditions} and \texttt{Y}: \texttt{Speed}, the variable \texttt{M}: \texttt{RoadWorks} is a mediation variable between \texttt{X} and \texttt{Y}.
 The Controlled Direct Effect is computed with the following formula:
 \begin{equation}
 	\text{CDE} = P(Y = y|\mathrm{do}(X = x),\mathrm{do}(M = m)) - P(Y = y|\mathrm{do}(X = x'),\mathrm{do}(M = m))
 \end{equation}
-Since there are not any spurious path between X and Y, the formula can be rewritten as follows:
+Since there are not any spurious path between X and Y, neither between Y and M, the formula can be rewritten as follows:
 \begin{equation*}
-\text{CDE} = P(y| x,\mathrm{do}( m)) - P(y|x',\mathrm{do}(m))
+\text{CDE} = P(y| x, m) - P(y|x',m)
 \end{equation*}
-Then, applying the backdoor criterion it is possible to bock the spurious path between M and Y, in particular using \texttt{Z}: \texttt{RoadConditions} as backdoor variable. We should consider the variable \texttt{W}: \texttt{Weather} since is parent of Z.
-Finally we obtain
+Defined $\mathtt{X}: \{ x_0=\mathtt{dry}, x_1=\mathtt{wet}\}$, $\mathtt{Y}: \{ y_0=\mathtt{slow}, y_1=\mathtt{fast}\}$, $\mathtt{M}: \{ m_0=\mathtt{false}, m_1=\mathtt{true}\}$ the CME are: 
 \begin{equation*}
-\text{CDE} = \bigg[\sum_{z,w}P(y| x,m, z)P(z|w)P(w)\bigg] - \bigg[\sum_{z,w}P(y| x',m, z)P(z|w)P(w)\bigg]
+\begin{aligned}
+\text{CDE} &= P(y_0|\mathrm{do}(x_0),\mathrm{do}(m_0)) - P(y_0|\mathrm{do}(x_1),\mathrm{do}(m_0)) = 0.720 - 0.360 = 0.360\\
+\text{CDE} &= P(y_1|\mathrm{do}(x_0),\mathrm{do}(m_0)) - P(y_1|\mathrm{do}(x_1),\mathrm{do}(m_0))= 0.23 - 0.090 = 0.140\\
+\text{CDE} &= P(y_0|\mathrm{do}(x_0),\mathrm{do}(m_1)) - P(y_0|\mathrm{do}(x_1),\mathrm{do}(m_1))=0.28 - 0.64 = -0.36\\
+\text{CDE} &= P(y_1|\mathrm{do}(x_0),\mathrm{do}(m_1)) - P(y_1|\mathrm{do}(x_1),\mathrm{do}(m_1))=0.770 - 0.910 = -0.14
+\end{aligned}
 \end{equation*}
-
-Defined $\mathtt{X}: \{ x_0=\mathtt{true}, x_1=\mathtt{false}\}$, $\mathtt{Y}: \{ y_0=\mathtt{low}, y_1=\mathtt{high}\}$, $\mathtt{M}: \{ m_0=\mathtt{slow}, m_1=\mathtt{fast}\}$ the CME are: 
-
-\begin{equation*}
-\text{CDE} = P(y_0|\mathrm{do}(x_0),\mathrm{do}(m_0)) - P(y_0|\mathrm{do}(x_1),\mathrm{do}(m_0)) = 0.1050 - 0.2330 = -0.128
-\end{equation*}
-\begin{equation*}
-\text{CDE} = P(y_1|\mathrm{do}(x_0),\mathrm{do}(m_0)) - P(y_1|\mathrm{do}(x_1),\mathrm{do}(m_0))=0.8950 - 0.7675 = 0.128
-\end{equation*}
-\begin{equation*}
-\text{CDE} = P(y_0|\mathrm{do}(x_0),\mathrm{do}(m_1)) - P(y_0|\mathrm{do}(x_1),\mathrm{do}(m_1))=0.405 - 0.725 = -0.31999999999999995
-\end{equation*}
-\begin{equation*}
-\text{CDE} = P(y_1|\mathrm{do}(x_0),\mathrm{do}(m_1)) - P(y_1|\mathrm{do}(x_1),\mathrm{do}(m_1))=0.595 - 0.275 = 0.31999999999999995
-\end{equation*}
-
- CDE of Y changing the value of X.
 
 \section{Simulation}
-Suppose that you can’t measure some parents of variable X chosen in every point of “Causal Inference”.
-Repeat the “Causal Inference” part of the exercise considering this new situation.
+\subsection*{Causal Effect and ACE}
+Given the graph, and a pair of variables \texttt{X}: \texttt{Speed} and \texttt{Y}: \texttt{Accident} and supposing we are not able to measure \texttt{RushHour}, that is a parent of X, we are interested in computing the Causal Effect of X on Y.
+In this case, since \texttt{RushHour} is a backdoor variable, ut unmeasurable, we cannot apply the backdoor criterion. In addition, we cannot rely on the frontdoor criterion, since using the variable \texttt{Danger} as frontdoor variable, the criterion is not abided.
+So, it is not possible to estimate the casual effect of X on Y.
+
+Moreover, the Average Causal Effect is not estimable since we cannot rely on the estimate of the causal effect. The consideration about the possible confounders are the same explained before, as well as those made for the Randomise Control Study.
+
+\subsection*{C-Specific Effect and Conditional Intervention}
+Given a new pair of variable such that \texttt{X}: \texttt{RoadWorks} and \texttt{Y}: \texttt{Speed}, and chosen \texttt{C}: \texttt{Weather}, and supposing we are not able to measure \texttt{RoadConditions}, as before we cannot relay neither on the backdoor and the frontdoor criterion. In conclusion, the C-Specific Effect of X on Y is not estimable.
+The same conclusion as before occurs: since the variables involved in the Conditional Intervention are the same, the Conditional Intervention of X on Y is not estimable.
+
+\subsection*{Mediation and Controlled Direct Effect}
+Given \texttt{X}: \texttt{RoadConditions} and \texttt{Y}: \texttt{Speed}, the mediation variable \texttt{M}: \texttt{RoadWorks} and supposing we are not able to measure \texttt{Weather}, the Controlled Direct Effect is computed exactly in the same way as before. In fact, since the formula does not require the values of the unmeasured variable, the results are:
+\begin{equation*}
+\begin{aligned}
+\text{CDE} &= P(y_0|\mathrm{do}(x_0),\mathrm{do}(m_0)) - P(y_0|\mathrm{do}(x_1),\mathrm{do}(m_0)) = 0.720 - 0.360 = 0.360\\
+\text{CDE} &= P(y_1|\mathrm{do}(x_0),\mathrm{do}(m_0)) - P(y_1|\mathrm{do}(x_1),\mathrm{do}(m_0))= 0.23 - 0.090 = 0.140\\
+\text{CDE} &= P(y_0|\mathrm{do}(x_0),\mathrm{do}(m_1)) - P(y_0|\mathrm{do}(x_1),\mathrm{do}(m_1))=0.28 - 0.64 = -0.36\\
+\text{CDE} &= P(y_1|\mathrm{do}(x_0),\mathrm{do}(m_1)) - P(y_1|\mathrm{do}(x_1),\mathrm{do}(m_1))=0.770 - 0.910 = -0.14
+\end{aligned}
+\end{equation*}
 
 \section{Comment on the Results}
-What kind of experience have you got with this model? E.g., is the causal model responding in a sensible way to your queries? What should be changed/modified to make it more realistic?
+In general, the model behaves as expected: all the queries have results not so far to my expectations.  
+Improvements to the model include the addition of variables and relationships. Moreover, including real-values variables could make the model more realistic.
 
 
 \end{document}
